@@ -1,7 +1,7 @@
 /*
  * Filename: credit.c  
  *
- * Description: 
+ * Description: Determine whether a number is a valid credit card. If so, prints out what type of credit card it is. 
  * 
  * 
  * Author: Steven Wong
