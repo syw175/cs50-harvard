@@ -15,9 +15,9 @@
 #include <cs50.h>
 
 
-int count_sentences(char* text);
-int count_letters(char* text);
-int count_words(char* text);
+int count_sentences(char *text);
+int count_letters(char *text);
+int count_words(char *text);
 int get_coleman_index(int letterCount, int wordCount, int sentenceCount);
 
 
@@ -56,7 +56,7 @@ int get_coleman_index(int letterCount, int wordCount, int sentenceCount) {
 
 
 // Iterate through each chracter to count the words
-int count_words(char* text) {
+int count_words(char *text) {
     int wordsCount = 0;
 
     for (int i = 0, n = strlen(text); i < n; i++) {
@@ -83,7 +83,7 @@ int count_words(char* text) {
 
 
 // Iterate through each character, if the character is a [".", ",", "!"], then it must be a new sentence
-int count_sentences(char* text) {
+int count_sentences(char *text) {
     int sentencesCount = 0;
 
     for (int i = 0; i < strlen(text); i++) {
@@ -96,7 +96,7 @@ int count_sentences(char* text) {
 
 
 // Iterate through each chracter, if the character is alphabetical, then it must be a new letter
-int count_letters(char* text) {
+int count_letters(char *text) {
     int lettersCount = 0;
 
     for (int i = 0; i < strlen(text); i++) {
