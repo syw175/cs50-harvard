@@ -1,9 +1,9 @@
 /*
- * Filename: credit.c  
+ * Filename: credit.c
  *
- * Description: Determine whether a number is a valid credit card. If so, prints out what type of credit card it is. 
- * 
- * 
+ * Description: Determine whether a number is a valid credit card. If so, prints out what type of credit card it is.
+ *
+ *
  * Author: Steven Wong
  * Date: June 26, 2022
  */
@@ -13,9 +13,9 @@
 
 
 // Get the length of a number
-int getNumLength (long num) { 
-    int count = 0; 
-    while (num > 0) { 
+int getNumLength (long num) {
+    int count = 0;
+    while (num > 0) {
         num /= 10;
         count++;
     }
@@ -24,46 +24,45 @@ int getNumLength (long num) {
 
 
 // Check if a long number is divisible by 10
-int isDivisibleBy10 (long num) { 
+int isDivisibleBy10 (long num) {
     return num % 10 == 0;
 }
 
 
 // Get Starting Digits (2)
 long getStartingDigits(long num) {
-    while (num >= 100) { 
+    while (num >= 100) {
         num /= 10;
     }
     return num;
 }
 
 
-int main (int argc, char **argv) { 
-    // Initialize variables 
+int main (int argc, char **argv) {
+    // Initialize variables
     long ccNum;
     int sumOddDigits = 0;
     int sumEvenDigits = 0;
 
     // Get a credit number from the user
     do {
-        printf("Number: ");
-        ccNum = get_long_long();
-        
+        ccNum = get_long("Number: ");
+
     } while(ccNum <= 0);
 
 
     long startingDigits = getStartingDigits(ccNum);
     int numLength = getNumLength(ccNum);
- 
+
 
     // Check if the credit is of a valid length
-    if (numLength != 13 && numLength != 15 && numLength!= 16) { 
+    if (numLength != 13 && numLength != 15 && numLength!= 16) {
         printf("INVALID\n");
         return 0;
     }
 
-    do { 
-    // Remove right most digit and add to sumEvenDigits 
+    do {
+    // Remove right most digit and add to sumEvenDigits
     sumEvenDigits += ccNum % 10;
     ccNum /= 10;
 
@@ -78,20 +77,22 @@ int main (int argc, char **argv) {
     } while (ccNum > 0);
 
     // If the result of Luhn's Algorithm is not divisble by 10, it is not a valid credit card #
-    if (!isDivisibleBy10(sumEvenDigits+sumOddDigits)) { 
+    if (!isDivisibleBy10(sumEvenDigits+sumOddDigits)) {
         printf("INVALID\n");
         return 0;
     }
 
     // Determine which type of credit card it is based on the starting digits
-    if (startingDigits == 34 || startingDigits == 37) { 
+    if (startingDigits == 34 || startingDigits == 37) {
         printf("AMEX\n");
-    } else if (startingDigits >= 51 && startingDigits <= 55) { 
+    } else if (startingDigits >= 51 && startingDigits <= 55) {
         printf("MASTERCARD\n");
-    } else { 
+    } else if (startingDigits/10 == 4) {
         printf("VISA\n");
+    } else {
+        printf("INVALID\n");
     }
-    
+
 
     return 0;
 }
