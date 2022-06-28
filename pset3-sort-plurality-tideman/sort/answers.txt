@@ -1,11 +1,11 @@
-sort1 uses: TODO
+sort1 uses: Bubble Sort
 
-How do you know?: TODO
+How do you know?: Run time is shorter than sort3 which is more apparent when using sorted texts. 
 
-sort2 uses: TODO
+sort2 uses: Merge Sort
 
-How do you know?: TODO
+How do you know?: It is the fastest amongst all the sort binary files. This becomes most apparently when using the larger datasets. 
 
-sort3 uses: TODO
+sort3 uses: Selection Sort
 
-How do you know?: TODO
+How do you know?: Run time is long even when a sorted data set is used. 
