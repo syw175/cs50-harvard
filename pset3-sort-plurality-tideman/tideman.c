@@ -1,3 +1,14 @@
+/*
+ * Filename: tideman.c
+ *
+ * Description: Implement a tideman (ranked-pairs) election program.
+ *
+ *
+ * Author: Steven Wong
+ * Date: June 29, 2022
+ */
+
+
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>
