@@ -1,3 +1,14 @@
+/*
+ * Filename: cash.c
+ *
+ * Description: Determine the minimum number of coins needed for any given amount of change.
+ *
+ *
+ * Author: Steven Wong
+ * Date: June 26, 2022
+ */
+
+
 #include <cs50.h>
 #include <stdio.h>
 
