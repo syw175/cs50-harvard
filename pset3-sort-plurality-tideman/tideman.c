@@ -105,14 +105,14 @@ int main(int argc, string argv[])
 
         printf("\n");
     }
-    // TEST FUNCTION --> Print out adjacency matrix 
-    printf("Printing out the preferences or adjacency matrix\n"); 
+    // TEST FUNCTION --> Print out adjacency matrix
+    printf("Printing out the preferences or adjacency matrix\n");
     printMatrix();
 
 
     add_pairs();
 
-    // TEST FUNCTION --> Print out pairs before the sort 
+    // TEST FUNCTION --> Print out pairs before the sort
     printf("Pairs before the sort:\n");
     printPairs();
 
@@ -131,20 +131,20 @@ int main(int argc, string argv[])
 }
 
 
-// TEST FUNCTION --> Printing out adjacency Matrix 
-void printMatrix(void) { 
-    for (int i = 0; i < candidate_count; i++) { 
-        for (int j = 0; j < candidate_count; j++) { 
-            printf("%d ", preferences[i][j]); 
+// TEST FUNCTION --> Printing out adjacency Matrix
+void printMatrix(void) {
+    for (int i = 0; i < candidate_count; i++) {
+        for (int j = 0; j < candidate_count; j++) {
+            printf("%d ", preferences[i][j]);
         }
         printf("\n");
     }
 }
 
 
-// TEST FUNCTION --> Printing out all pairs 
-void printPairs(void) { 
-    for (int i = 0; i < pair_count; i++) { 
+// TEST FUNCTION --> Printing out all pairs
+void printPairs(void) {
+    for (int i = 0; i < pair_count; i++) {
         printf("Pair %d: Candidate %d won, Candidate %d lost\n", i+1, pairs[i].winner, pairs[i].loser);
     }
     return;
@@ -177,18 +177,18 @@ void record_preferences(int ranks[])
 void add_pairs(void)
 {
     // TODO
-    for (int y = 0; y < candidate_count; y++) { 
-        for (int x = 0; x < candidate_count; x++) { 
-            
-            if (preferences[y][x] != preferences[x][y] && y > x) { 
-                if (preferences[y][x] > preferences[x][y]) { 
-                    pair currPair; 
+    for (int y = 0; y < candidate_count; y++) {
+        for (int x = 0; x < candidate_count; x++) {
+
+            if (preferences[y][x] != preferences[x][y] && y > x) {
+                if (preferences[y][x] > preferences[x][y]) {
+                    pair currPair;
                     currPair.winner = y;
                     currPair.loser = x;
                     pairs[pair_count] = currPair;
                     pair_count++;
-                } else { 
-                    pair currPair; 
+                } else {
+                    pair currPair;
                     currPair.winner = x;
                     currPair.loser = y;
                     pairs[pair_count] = currPair;
@@ -200,12 +200,12 @@ void add_pairs(void)
     return;
 }
 
+
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    // TODO
     for (int i = 0; i < pair_count; i++) {
-        int maxVictoryMarginIndex = i; 
+        int maxVictoryMarginIndex = i;
         int pairWinner = pairs[i].winner;
         int pairLoser = pairs[i].loser;
         int maxStrength = preferences[pairWinner][pairLoser] - preferences[pairLoser][pairWinner];
@@ -215,18 +215,17 @@ void sort_pairs(void)
             int toCompareWinner = pairs[j].winner;
             int toCompareLoser = pairs[j].loser;
             int currentStrength = preferences[toCompareWinner][toCompareLoser] - preferences[toCompareLoser][toCompareWinner];
-            
+
             if (currentStrength > maxStrength) {
-                maxStrength = currentStrength; 
+                maxStrength = currentStrength;
                 maxVictoryMarginIndex = j;
             }
-
-            pair temp = pairs[i];
-            pairs[i] = pairs[maxVictoryMarginIndex];
-            pairs[maxVictoryMarginIndex]= temp;
         }
+
+        pair temp = pairs[i];
+        pairs[i] = pairs[maxVictoryMarginIndex];
+        pairs[maxVictoryMarginIndex]= temp;
     }
-    return;
 }
 
 // Lock pairs into the candidate graph in order, without creating cycles
