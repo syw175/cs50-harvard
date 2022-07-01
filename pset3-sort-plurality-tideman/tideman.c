@@ -5,7 +5,7 @@
  *
  *
  * Author: Steven Wong
- * Date: June 29, 2022
+ * Date: June 30, 2022
  */
 
 
@@ -44,6 +44,11 @@ void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
+
+
+// TEST FUNCTIONS --> Prototypes
+void printPairs(void);
+void printMatrix(void);
 
 int main(int argc, string argv[])
 {
@@ -100,12 +105,49 @@ int main(int argc, string argv[])
 
         printf("\n");
     }
+    // TEST FUNCTION --> Print out adjacency matrix 
+    printf("Printing out the preferences or adjacency matrix\n"); 
+    printMatrix();
+
 
     add_pairs();
+
+    // TEST FUNCTION --> Print out pairs before the sort 
+    printf("Pairs before the sort:\n");
+    printPairs();
+
+
     sort_pairs();
+
+    // TEST FUNCTION --> Print out pairs after the sort
+    printf("Pairs after the sort:\n");
+    printPairs();
+
+
+
     lock_pairs();
     print_winner();
     return 0;
+}
+
+
+// TEST FUNCTION --> Printing out adjacency Matrix 
+void printMatrix(void) { 
+    for (int i = 0; i < candidate_count; i++) { 
+        for (int j = 0; j < candidate_count; j++) { 
+            printf("%d ", preferences[i][j]); 
+        }
+        printf("\n");
+    }
+}
+
+
+// TEST FUNCTION --> Printing out all pairs 
+void printPairs(void) { 
+    for (int i = 0; i < pair_count; i++) { 
+        printf("Pair %d: Candidate %d won, Candidate %d lost\n", i+1, pairs[i].winner, pairs[i].loser);
+    }
+    return;
 }
 
 // Update ranks given a new vote
@@ -135,6 +177,26 @@ void record_preferences(int ranks[])
 void add_pairs(void)
 {
     // TODO
+    for (int y = 0; y < candidate_count; y++) { 
+        for (int x = 0; x < candidate_count; x++) { 
+            
+            if (preferences[y][x] != preferences[x][y] && y > x) { 
+                if (preferences[y][x] > preferences[x][y]) { 
+                    pair currPair; 
+                    currPair.winner = y;
+                    currPair.loser = x;
+                    pairs[pair_count] = currPair;
+                    pair_count++;
+                } else { 
+                    pair currPair; 
+                    currPair.winner = x;
+                    currPair.loser = y;
+                    pairs[pair_count] = currPair;
+                    pair_count++;
+                }
+            }
+        }
+    }
     return;
 }
 
@@ -142,6 +204,25 @@ void add_pairs(void)
 void sort_pairs(void)
 {
     // TODO
+    for (int i = 0; i < pair_count; i++) {
+        int maxVictoryMargin = 0;
+        int maxVictoryMarginIndex = 0; 
+        for (int j = i + 1; j < pair_count; j++) {
+            int currentPairWinner = pairs[i].winner;
+            int currentPairLoser = pairs[i].loser;
+            int currentVictoryMargin = preferences[currentPairWinner][currentPairLoser] - 
+                                        preferences[currentPairLoser][currentPairWinner];
+            
+            if (currentVictoryMargin > maxVictoryMargin) { 
+                maxVictoryMargin = currentVictoryMargin;
+                maxVictoryMarginIndex = j;
+            }
+
+            pair temp = pairs[i];
+            pairs[i] = pairs[maxVictoryMarginIndex];
+            pairs[maxVictoryMarginIndex]= temp;
+        }
+    }
     return;
 }
 
