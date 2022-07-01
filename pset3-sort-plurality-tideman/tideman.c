@@ -205,16 +205,19 @@ void sort_pairs(void)
 {
     // TODO
     for (int i = 0; i < pair_count; i++) {
-        int maxVictoryMargin = 0;
-        int maxVictoryMarginIndex = 0; 
+        int maxVictoryMarginIndex = i; 
+        int pairWinner = pairs[i].winner;
+        int pairLoser = pairs[i].loser;
+        int maxStrength = preferences[pairWinner][pairLoser] - preferences[pairLoser][pairWinner];
+
         for (int j = i + 1; j < pair_count; j++) {
-            int currentPairWinner = pairs[i].winner;
-            int currentPairLoser = pairs[i].loser;
-            int currentVictoryMargin = preferences[currentPairWinner][currentPairLoser] - 
-                                        preferences[currentPairLoser][currentPairWinner];
+
+            int toCompareWinner = pairs[j].winner;
+            int toCompareLoser = pairs[j].loser;
+            int currentStrength = preferences[toCompareWinner][toCompareLoser] - preferences[toCompareLoser][toCompareWinner];
             
-            if (currentVictoryMargin > maxVictoryMargin) { 
-                maxVictoryMargin = currentVictoryMargin;
+            if (currentStrength > maxStrength) {
+                maxStrength = currentStrength; 
                 maxVictoryMarginIndex = j;
             }
 
