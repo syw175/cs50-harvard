@@ -5,7 +5,7 @@
  *
  *
  * Author: Steven Wong
- * Date: June 30, 2022
+ * Date: July 1, 2022
  */
 
 
@@ -187,6 +187,7 @@ void add_pairs(void)
                     currPair.loser = x;
                     pairs[pair_count] = currPair;
                     pair_count++;
+
                 } else {
                     pair currPair;
                     currPair.winner = x;
@@ -201,7 +202,7 @@ void add_pairs(void)
 }
 
 
-// Sort pairs in decreasing order by strength of victory
+// Sort pairs in decreasing order by strength of victory (Selection sort)
 void sort_pairs(void)
 {
     for (int i = 0; i < pair_count; i++) {
@@ -211,7 +212,6 @@ void sort_pairs(void)
         int maxStrength = preferences[pairWinner][pairLoser] - preferences[pairLoser][pairWinner];
 
         for (int j = i + 1; j < pair_count; j++) {
-
             int toCompareWinner = pairs[j].winner;
             int toCompareLoser = pairs[j].loser;
             int currentStrength = preferences[toCompareWinner][toCompareLoser] - preferences[toCompareLoser][toCompareWinner];
@@ -232,6 +232,9 @@ void sort_pairs(void)
 void lock_pairs(void)
 {
     // TODO
+    for (int y = 0; y < pair_count; y++) {
+        locked[pairs[y].winner][pairs[y].loser] = true;
+    }
     return;
 }
 
