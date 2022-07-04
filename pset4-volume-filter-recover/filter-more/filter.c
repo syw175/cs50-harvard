@@ -1,3 +1,15 @@
+/*
+ * Filename: filter.c
+ *
+ * Description: Applies filters to bitmap images (BMP) such as conversion to grayscale,
+ *              blurring, reflecting, and detection of edges.
+ *
+ *
+ * Author: Steven Wong
+ * Date: July 4, 2022
+ */
+
+
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>

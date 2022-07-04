@@ -1,8 +1,22 @@
 #include "helpers.h"
+#include <math.h>
 
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
 {
+    for (int row = 0; row < height; row++) 
+    {
+        for (int col = 0; col < width; col++) 
+        {
+            RGBTRIPLE *currentColor = &image[row][col];
+            BYTE grayScaleCol = round((currentColor->rgbtRed + currentColor->rgbtBlue + currentColor->rgbtGreen)/3.0);
+
+            currentColor->rgbtRed = grayScaleCol;
+            currentColor->rgbtBlue = grayScaleCol;
+            currentColor->rgbtGreen = grayScaleCol;
+
+        }
+    }
     return;
 }
 
