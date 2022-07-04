@@ -1,4 +1,13 @@
-// Modifies the volume of an audio file
+/*
+ * Filename: volume.c
+ *
+ * Description: Modifies the volume of an audio file
+ *
+ *
+ * Author: Steven Wong
+ * Date: July 4, 2022
+ */
+
 
 #include <stdint.h>
 #include <stdio.h>
@@ -33,11 +42,25 @@ int main(int argc, char *argv[])
 
     float factor = atof(argv[3]);
 
-    // TODO: Copy header from input file to output file
+    // Copy header from input file to output file
+    uint8_t header[HEADER_SIZE];
+    fread(header, sizeof(uint8_t), HEADER_SIZE, input);
+    fwrite(header, sizeof(uint8_t), HEADER_SIZE, output);
 
-    // TODO: Read samples from input file and write updated data to output file
+
+    // Read samples from input file and write updated data to output file
+    int16_t buffer = 0;
+    while (fread(&buffer, sizeof(uint16_t), 1, input) == 1)
+    {
+        buffer *= factor;
+        fwrite(&buffer, sizeof(uint16_t), 1, output);
+    }
+
 
     // Close files
     fclose(input);
     fclose(output);
+
+
+    return 0;
 }
