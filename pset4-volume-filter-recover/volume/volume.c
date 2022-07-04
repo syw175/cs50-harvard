@@ -1,7 +1,10 @@
 /*
  * Filename: volume.c
  *
- * Description: Modifies the volume of an audio file
+ * Description: Modifies the volume of an audio file. Takes 3 CLI arguments:
+ *              1. 'Inputfile.WAV'
+ *              2. 'Outputfile.WAV'
+ *              3. Floating point scale factor to modify volume by
  *
  *
  * Author: Steven Wong
@@ -15,6 +18,8 @@
 
 // Number of bytes in .wav header
 const int HEADER_SIZE = 44;
+typedef uint8_t HEADER_BYTE;
+typedef int16_t AUDIO_BYTE;
 
 int main(int argc, char *argv[])
 {
@@ -43,17 +48,17 @@ int main(int argc, char *argv[])
     float factor = atof(argv[3]);
 
     // Copy header from input file to output file
-    uint8_t header[HEADER_SIZE];
-    fread(header, sizeof(uint8_t), HEADER_SIZE, input);
-    fwrite(header, sizeof(uint8_t), HEADER_SIZE, output);
+    HEADER_BYTE headerBuffer[HEADER_SIZE];
+    fread(headerBuffer, sizeof(HEADER_BYTE), HEADER_SIZE, input);
+    fwrite(headerBuffer, sizeof(HEADER_BYTE), HEADER_SIZE, output);
 
 
     // Read samples from input file and write updated data to output file
-    int16_t buffer = 0;
-    while (fread(&buffer, sizeof(uint16_t), 1, input) == 1)
+    AUDIO_BYTE audioBuffer;
+    while (fread(&audioBuffer, sizeof(AUDIO_BYTE), 1, input) == 1)
     {
-        buffer *= factor;
-        fwrite(&buffer, sizeof(uint16_t), 1, output);
+        audioBuffer *= factor;
+        fwrite(&audioBuffer, sizeof(AUDIO_BYTE), 1, output);
     }
 
 
