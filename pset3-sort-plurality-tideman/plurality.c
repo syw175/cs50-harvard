@@ -66,23 +66,27 @@ int main(int argc, string argv[])
 // Update vote totals given a new vote
 bool vote(string name)
 {
-    // Check if a candidate exists, then update their vote count and return true
+    // Iterate through candidates and check if name is a match
     for (int i = 0; i < candidate_count; i++) {
+        // If the candidate is found, update their vote count and return true
         if (strcmp(candidates[i].name, name) == 0) {
             candidates[i].votes++;
             return true;
         }
     }
+    // If the candidate is not found, return false
     return false;
 }
 
 // Print the winner (or winners) of the election
 void print_winner(void)
 {
+    // Initialize max vote count to 0
     int maxVotes = 0;
 
     // Iterate over list a cnadidates to get the max value of votes
     for (int i = 0; i < candidate_count; i++) {
+        // If the current candidate has more votes than the max, update max
         if (candidates[i].votes > maxVotes) {
             maxVotes = candidates[i].votes;
         }
@@ -90,6 +94,7 @@ void print_winner(void)
 
     // Print candidates who have votes equal to the max votes
     for (int i = 0; i < candidate_count; i++) {
+        // If the current candidate has the same votes as the max, print their name
         if (candidates[i].votes == maxVotes) {
             printf("%s\n", candidates[i].name);
         }

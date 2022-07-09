@@ -5,7 +5,7 @@
  *
  *
  * Author: Steven Wong
- * Date: July 1, 2022
+ * Date: July 9, 2022
  */
 
 
@@ -113,12 +113,6 @@ int main(int argc, string argv[])
         printf("\n");
     }
 
-    // TO REMOVE.....................................
-    // TEST FUNCTION --> Print out adjacency matrix
-    printf("Printing out the preferences or adjacency matrix\n");
-    printMatrix();
-
-
     add_pairs();
 
 
@@ -193,21 +187,26 @@ void printLocked(void) {
 
 
 // Update ranks given a new vote
-bool vote(int rank, string name, int ranks[])
-{
+bool vote(int rank, string name, int ranks[]) {
+    
+    // Iterate through the new vote and update the ranks array
     for (int i = 0; i < candidate_count; i++) {
+
+        // Check if a candidate is valid and if it is, update the ranks array and return true
         if (strcmp(name, candidates[i]) == 0) {
             ranks[rank] = i;
             return true;
         }
     }
+    // If the candidate is not valid, return false
     return false;
 }
 
 
 // Update preferences given one voter's ranks
-void record_preferences(int ranks[])
-{
+void record_preferences(int ranks[]) {
+
+    // Iterate through the ranks array and update the preferences matrix
     for (int i = 0; i < candidate_count; i++) {
         for (int j = i + 1; j < candidate_count; j++) {
             preferences[ranks[i]][ranks[j]]++;
@@ -218,11 +217,16 @@ void record_preferences(int ranks[])
 
 
 // Record pairs of candidates where one is preferred over the other
-void add_pairs(void)
-{
+void add_pairs(void) {
+
+    // Iterate through the rows of the preferences matrix
     for (int rows = 0; rows < candidate_count; rows++) {
+        // Iterate through the columns of the preferences matrix
         for (int cols = 0; cols < candidate_count; cols++) {
+
+            // If there is a preference for candidate i over candidate j...
             if (preferences[rows][cols] > preferences[cols][rows]) {
+                // Create a new pair and add it to the array of pairs
                 pair newPair = {rows, cols};
                 pairs[pair_count] = newPair;
                 pair_count++;
@@ -234,36 +238,45 @@ void add_pairs(void)
 
 
 // Sort pairs in decreasing order by strength of victory (Selection sort)
-void sort_pairs(void)
-{
+void sort_pairs(void) {
+
+    // Iterate through the pairs array
     for (int i = 0; i < pair_count; i++) {
         int maxVictoryMarginIndex = i;
         int maxStrength = getMarginOfVictory(i);
 
+        // Iterate through the pairs array from the current index to the end
         for (int j = i + 1; j < pair_count; j++) {
             int currentStrength = getMarginOfVictory(j);
 
+            // If the current pair has a stronger victory margin than the max pair, update the max pair
             if (getMarginOfVictory(j) > maxStrength) {
                 maxStrength = currentStrength;
+                // Update the max victory margin index
                 maxVictoryMarginIndex = j;
             }
         }
 
-        // Swap the next max margin of victory pair to the ith index position
+        // Swap the pair at index i with the pair at index maxVictoryMarginIndex
         pair temp = pairs[i];
         pairs[i] = pairs[maxVictoryMarginIndex];
         pairs[maxVictoryMarginIndex]= temp;
+        return;
     }
 }
 
 
-// Get the the margin of victory for the ith index pair of candidates from the array pairs
-int getMarginOfVictory(int pairIndex)
-{
+// Returns the margin of victory for the ith index pair of candidates from the array pairs
+int getMarginOfVictory(int pairIndex) {
+
+    // Get the winner and loser of the pair
     int winner = pairs[pairIndex].winner;
     int loser = pairs[pairIndex].loser;
+
+    // Get the margin of victory for the pair
     int marginOfVictory = preferences[winner][loser] - preferences[loser][winner];
 
+    // Return the margin of victory
     return marginOfVictory;
 }
 
@@ -293,16 +306,20 @@ bool create_cycle(bool lockedArray[MAX][MAX], pair originPair, pair toAddPair) {
 
 
 // Print the winner of the election
-void print_winner(void)
-{
+void print_winner(void) {
+
+    // Iterate through the locked array
     for (int cols = 0; cols < candidate_count; cols++) {
         bool found = true;
+
+        // If the column is all true, then the candidate is the winner
         for (int rows = 0; rows < candidate_count; rows++) {
             if (locked[rows][cols]) {
                 found = false;
             }
         }
 
+        // If found is true, then the candidate is the winner
         if (found) {
             printf("%s\n", candidates[cols]);
             break;

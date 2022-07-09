@@ -54,30 +54,35 @@ int get_cents(void)
     // Continue getting cents owed until a positive integer is given 
     do 
     {
+        // Get cents owed
         cents = get_int("Cents owed: ");
     } 
     while (cents < 0);
 
+    // Return cents owed
     return cents;
 }
 
 
-
+// Calculate the number of quarters to give the customer
 int calculate_quarters(int cents)
 {
     return cents/25;
 }
 
+// Calculate the number of dimes to give the customer
 int calculate_dimes(int cents)
 {
     return cents/10;
 }
 
+// Calculate the number of nickels to give the customer
 int calculate_nickels(int cents)
 {
     return cents/5;
 }
 
+// Calculate the number of pennies to give the customer
 int calculate_pennies(int cents)
 {
     return cents/1;

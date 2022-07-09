@@ -5,7 +5,7 @@
  *
  *
  * Author: Steven Wong
- * Date: July 2, 2022
+ * Date: July 9, 2022
  */
 
 
@@ -139,21 +139,26 @@ int main(int argc, string argv[])
 // Record preference if vote is valid
 bool vote(int voter, int rank, string name)
 {
+    // Iterate through the candidates array and check if the name is valid
     for (int i = 0; i < candidate_count; i++) { 
+        // If the name is valid, record the vote in the preferences array and return true
         if (strcmp(name, candidates[i].name) == 0) { 
             preferences[voter][rank] = i; 
             return true;
         }
     }
+
+    // If the name is invalid, return false
     return false;
 }
 
 // Tabulate votes for non-eliminated candidates
 void tabulate(void)
 {
+    // Iterate through the preferences array and add the votes to the candidate's vote count
     for (int voter = 0; voter < voter_count; voter++) { 
         for (int choices = 0; choices < 3; choices++) {
-            // Get the current candidate 
+            // Get the index of the candidate in the candidates array
             int currentCandidate = preferences[voter][choices];
 
             // If the current candidate isn't eliminated, update their vote count and go to next voter
@@ -169,50 +174,67 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
+    //Calculate the number of votes required to win the election
     int majorityCount = voter_count/2;
+    // Iterate through the candidates array and check if a candidate has more than the majority count of votes
     for (int i = 0; i < voter_count; i++) { 
         if (candidates[i].votes > majorityCount) { 
             printf("%s\n", candidates[i].name);
             return true;
         }
     }
+    // If no candidate has more than the majority count of votes, return false
     return false;
 }
 
 // Return the minimum number of votes any remaining candidate has
 int find_min(void)
 {
+    // Initialize the minimum vote count to the number of voters
     int min = voter_count;
+
+    // Iterate through the candidates array and check if the candidate has fewer votes than the minimum
     for (int i = 0; i < candidate_count; i++) {
+        // If the candidate is eliminated, go to next candidate
         if (candidates[i].eliminated) { 
             continue;
         }
 
+        // If the candidate has fewer votes than the minimum, update the minimum vote count
         if (candidates[i].votes < min) { 
             min = candidates[i].votes;
         }
     }
+    // Return the minimum vote count
     return min;
 }
 
 // Return true if the election is tied between all candidates, false otherwise
 bool is_tie(int min)
 {
+    // Iterate through the candidates array 
     for (int i = 0; i < candidate_count; i++) { 
+
+        // If the candidate is eliminated, go to next candidate
         if (candidates[i].eliminated == true) { 
             continue;
         }
+
+        // If there is a candidate with a different number of votes than the minimum, return false
         if (candidates[i].votes != min) { 
             return false;
         }
     }
+    // If there is no candidate with a different number of votes than the minimum, return true
     return true;
 }
 
 // Eliminate the candidate (or candidates) in last place
 void eliminate(int min)
 {
+    // Iterate through the candidates array
     for (int i = 0; i < candidate_count; i++) { 
+        // If the candidate has the same number of votes as the minimum, eliminate them
         if (candidates[i].votes == min) { 
             candidates[i].eliminated = true;
         }

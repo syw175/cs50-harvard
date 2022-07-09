@@ -8,17 +8,26 @@
  * Date: June 26, 2022
  */
 
+
 #include<stdio.h>
 #include<cs50.h>
 
 
-// Get the length of a number
+// Get the number of digits in a number
 int getNumLength (long num) {
+
+    // Initialize the number of digits
     int count = 0;
+
+    // Loop through the number
     while (num > 0) {
+
+        // Divide the number by 10
         num /= 10;
         count++;
     }
+
+    // Return the number of times the number was divided by 10 to get the number of digits
     return count;
 }
 
@@ -31,9 +40,13 @@ int isDivisibleBy10 (long num) {
 
 // Get Starting Digits (2)
 long getStartingDigits(long num) {
+
+    // Divide by 10 until the number has only two digits
     while (num >= 100) {
         num /= 10;
     }
+
+    // Return the starting digits of the original number
     return num;
 }
 
@@ -44,24 +57,26 @@ int main (int argc, char **argv) {
     int sumOddDigits = 0;
     int sumEvenDigits = 0;
 
-    // Get a credit number from the user
+    // Ask the user for a credit card number until a valid number is given
     do {
         ccNum = get_long("Number: ");
-
     } while(ccNum <= 0);
 
-
+    // Get the starting digits of the credit card number
     long startingDigits = getStartingDigits(ccNum);
+    // Get the number of digits in the credit card number
     int numLength = getNumLength(ccNum);
 
 
-    // Check if the credit is of a valid length
+    // Check if the credit is of a valid length, if they are not, print an error message
     if (numLength != 13 && numLength != 15 && numLength!= 16) {
         printf("INVALID\n");
         return 0;
     }
 
+    // Determine if the credit card number is valid
     do {
+        
     // Remove right most digit and add to sumEvenDigits
     sumEvenDigits += ccNum % 10;
     ccNum /= 10;
@@ -85,14 +100,15 @@ int main (int argc, char **argv) {
     // Determine which type of credit card it is based on the starting digits
     if (startingDigits == 34 || startingDigits == 37) {
         printf("AMEX\n");
+
     } else if (startingDigits >= 51 && startingDigits <= 55) {
         printf("MASTERCARD\n");
+
     } else if (startingDigits/10 == 4) {
         printf("VISA\n");
+
     } else {
         printf("INVALID\n");
     }
-
-
     return 0;
 }
