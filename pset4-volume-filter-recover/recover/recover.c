@@ -1,7 +1,8 @@
 /*
  * Filename: recover.c
  *
- * Description: Recovers JPEGS from a forensic image
+ * Description: Recovers JPEGS from a forensic image. Outputs files in ###.jpg where ###
+ *              is a three-digit number, starting with 000 for the first image and counting up.
  *
  *
  * Author: Steven Wong
@@ -9,70 +10,69 @@
  */
 
 
-
-
-// The files you generate should each be named ###.jpg, where ### is a three-digit decimal number, 
-// starting with 000 for the first image and counting up.
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 
-// Images are blocks of 512 bytes
+
+// Structure to represent blocks in FAT32 file system
 typedef uint8_t BYTE;
+
 
 int main(int argc, char *argv[]) {
 
     // Validate that the user correctly provided the name of forensic image
-    if (argc != 2) { 
+    if (argc != 2) {
         printf("Usage: ./recover IMAGE\n");
         return 1;
     }
 
-    // Name of a forensic image from which to recover JPEGS
+    // Open the forensic image given in the command line from which to recover JPEGs
     char *filename = argv[1];
-
-    // Open the file for reading 
     FILE *recoveryFile = fopen(filename, "r");
 
     // Validate that file opening was successful and that the file is not NULL
-    if (recoveryFile == NULL) { 
+    if (recoveryFile == NULL) {
         return 1;
     }
 
-    // Read blocks of 512 bytes until EOF is reached
+    // Initialize a buffer to store each 512-byte block of the file
     BYTE buffer[512];
 
+    // Initialize a counter to keep track of the number of images recovered
+    int fileCount = 0;
+    int currentlyWriting = 0;
+    FILE *output = NULL;
+    char toSaveName[8];
 
 
+    // Read the file in 512 byte chunks until end of file is reached
+    while (fread(buffer, sizeof(BYTE), 512, recoveryFile) == 512) {
 
-    // Demo on ONE IMAGE FOR PROOF OF CONCEPT
-    FILE *newfile = fopen("1.jpeg", "w");
-    int test1 = 0;
+        // If the first four bytes are 0xff, 0xd8, 0xff, and 0xe[0-c], then it is a new JPEG
+        if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3]>>4) == 0xe) {
 
+            // Create a string for the name of the file to be saved with the fileCount
+            sprintf(toSaveName, "%.3i.jpg", fileCount);
 
-    // CURRENTLY DEMOING ONE IMAGE - RESULT -> WORKING
-    while (fread(buffer, sizeof(BYTE), 512, recoveryFile) == 512) { 
+            // Open the file for writing
+            output = fopen(toSaveName, "w");
 
-        // This should be working for detecting the start/end of a new JPEG
-        if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3]>>4) == 0xe) { 
-            // TEST
-            test1++;
+            // Set the flag to 1 to indicate that a new file is being written
+            currentlyWriting = 1;
+
+            // Increment the file count written so far
+            fileCount++;
         }
 
-
-        // TEST
-        if (test1 == 1) { 
-            fwrite(buffer, sizeof(BYTE), 512, newfile);
+        // If the current file is not NULL, write the buffer to the file
+        if (currentlyWriting == 1) {
+            fwrite(buffer, sizeof(BYTE), 512, output);
         }
-
-        if (test1 == 2) { 
-            break;
-        }
-        // TEST
-        // blocksInCurrentImage++;
     }
 
+    // Close the file
+    fclose(output);
     return 0;
 }
 
