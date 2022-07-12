@@ -72,6 +72,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Close the file
+    fclose(recoveryFile);
     fclose(output);
     return 0;
 }
