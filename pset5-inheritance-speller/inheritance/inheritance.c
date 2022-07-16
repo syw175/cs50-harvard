@@ -1,3 +1,13 @@
+/*
+ * Filename: inheritance.c
+ *
+ * Description: 
+ *
+ *
+ * Author: Steven Wong
+ * Date: July 15, 2022
+ */
+
 // Simulate genetic inheritance of blood type
 
 #include <stdbool.h>
