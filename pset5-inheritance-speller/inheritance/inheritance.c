@@ -26,6 +26,7 @@ person;
 const int GENERATIONS = 3;
 const int INDENT_LENGTH = 4;
 
+// Function prototypes
 person *create_family(int generations);
 void print_family(person *p, int generation);
 void free_family(person *p);
@@ -59,14 +60,15 @@ person *create_family(int generations)
         person *parent0 = create_family(generations - 1);
         person *parent1 = create_family(generations - 1);
 
-        // TODO: Set parent pointers for current person
+        // Set parent pointers for current person
         individual->parents[0] = parent0;
         individual->parents[1] = parent1;
 
-        // TODO: Randomly assign current person's alleles based on the alleles of their parents
+        // Get the alleles from the current person's parents
         char parent0Allele[2] = { parent0->alleles[0], parent0->alleles[1] };
         char parent1Allele[2] = { parent1->alleles[1], parent1->alleles[1] };
 
+        // Randomly assign current person's alleles based on the alleles of their parents
         individual->alleles[0] = parent0Allele[rand() % 2];
         individual->alleles[1] = parent1Allele[rand() %2];
     }
@@ -74,32 +76,32 @@ person *create_family(int generations)
     // If there are no generations left to create
     else
     {
-        // TODO: Set parent pointers to NULL
+        // Set parent pointers to NULL
         individual->parents[0] = NULL;
         individual->parents[1] = NULL;
 
-        // TODO: Randomly assign alleles
+        // Randomly assign alleles
         individual->alleles[0] = random_allele();
         individual->alleles[1] = random_allele();
     }
 
-    // TODO: Return newly created person
+    // Return newly created person
     return individual;
 }
 
 // Free `p` and all ancestors of `p`.
 void free_family(person *p)
 {
-    // TODO: Handle base case
+    // Handle base case
     if (p == NULL) {
         return;
     }
 
-    // TODO: Free parents recursively
+    // Free parents recursively
     free_family(p->parents[0]);
     free_family(p->parents[1]);
 
-    // TODO: Free child
+    // Free child
     free(p);
 
 }
