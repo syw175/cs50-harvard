@@ -27,8 +27,8 @@ typedef struct node
 }
 node;
 
-// TODO: Choose number of buckets in hash table
-const unsigned int N = 26;
+// Choose number of buckets in hash table
+const unsigned int N = 26*26*26;
 unsigned int dictionaryCount = 0;
 
 
@@ -39,9 +39,9 @@ node *table[N];
 bool check(const char *word)
 {
     // Hash the word
-    int indexToCheck = hash(word);
+    int hashValue = hash(word);
     // Get the head of linkedlist element in the hash table
-    node *currentNode = table[indexToCheck];
+    node *currentNode = table[hashValue];
 
     // While the current node is not NULL
     while (currentNode != NULL) {
@@ -60,8 +60,6 @@ bool check(const char *word)
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
-    // TODO: Improve this hash function
-    // return toupper(word[0]) - 'A';
     unsigned long total = 0;
     for (int i = 0; i < strlen(word); i++) {
         total += tolower(word[i]);
@@ -100,12 +98,12 @@ bool load(const char *dictionary)
         strcpy(newNode->word, currentWord);
 
         // Get hash value for current word
-        int indexForNewNode = hash(newNode->word);
+        int hashValue = hash(newNode->word);
 
-        // Set new node's next to the head of the linkedlist in the hash table at indexForNewNode
-        newNode->next = table[indexForNewNode];
+        // Set new node's next to the head of the linkedlist in the hash table at hashValue
+        newNode->next = table[hashValue];
         // Set current node to head of linked list at index
-        table[indexForNewNode] = newNode;
+        table[hashValue] = newNode;
         // Increment dictionary count
         dictionaryCount++;
     }
