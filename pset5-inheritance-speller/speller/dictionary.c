@@ -5,7 +5,7 @@
  *
  *
  * Author: Steven Wong
- * Date: July 18, 2022
+ * Date: July 19, 2022
  */
 
 
@@ -56,6 +56,7 @@ bool check(const char *word)
     return false;
 }
 
+
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
@@ -97,18 +98,12 @@ bool load(const char *dictionary)
 
         // Copy word to new node
         strcpy(newNode->word, currentWord);
-        // Set next node to NULL
-        newNode->next = NULL;
 
         // Get hash value for current word
         int indexForNewNode = hash(newNode->word);
 
-        // Check if hash table is empty at index
-        if (table[indexForNewNode] != NULL) {
-            // If not, set new node's next to current node at index
-            newNode->next = table[indexForNewNode]->next;
-        }
-
+        // Set new node's next to the head of the linkedlist in the hash table at indexForNewNode
+        newNode->next = table[indexForNewNode];
         // Set current node to head of linked list at index
         table[indexForNewNode] = newNode;
         // Increment dictionary count
@@ -120,6 +115,7 @@ bool load(const char *dictionary)
     return true;
 }
 
+
 // Returns number of words in dictionary if loaded, else 0 if not yet loaded
 unsigned int size(void)
 {
@@ -129,6 +125,7 @@ unsigned int size(void)
     }
     return 0;
 }
+
 
 // Unloads dictionary from memory, returning true if successful, else false
 bool unload(void)
@@ -148,7 +145,6 @@ bool unload(void)
             current = next;
         }
     }
-
     // Return true
     return true;
 }
