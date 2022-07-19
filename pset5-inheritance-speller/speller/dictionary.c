@@ -60,7 +60,7 @@ bool load(const char *dictionary)
     }
 
     // Buffer for a word 
-    char currentWord[LENGTH+1];
+    char currentWord[LENGTH];
 
     // While the current word is not EOF, 
     while (fscanf(fileToRead, "%s", currentWord) != EOF) { 
@@ -84,11 +84,14 @@ bool load(const char *dictionary)
         int indexForNewNode = hash(newNode->word);
 
         // Insert the new node at the index value given by the hash function
-        node *temp = table[indexForNewNode]->next;
+        if (table[indexForNewNode] != NULL) { 
+            newNode->next = table[indexForNewNode]->next;
+        }
+
         table[indexForNewNode] = newNode;
-        newNode->next = temp;
         dictionaryCount++;
     }
+    
     fclose(fileToRead);
     return true;
 }
