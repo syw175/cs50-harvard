@@ -28,12 +28,22 @@ def getHeight():
 # Draw the pyramid
 def drawPyramid(height): 
     for row in range(height):
-        print(" " * (height-row-1), end="")
-        print("#" * (row+1), end="")
-        print(" ", end="")
-        print("#" * (row +1), end="")
+        # Calculate the hashes to be printed in the current row 
+        rowHashes = row + 1 
+        # Calculate the spaces to be printed in the current row 
+        rowSpaces = height - row -1 
+
+        # Print the LHS pyramid 
+        print(" " * rowSpaces, end="")
+        print("#" * rowHashes, end="")
+
+        # Print the LHS-RHS pyramid divider 
+        print("  ", end="")
+        # Print the RHS pyramid 
+        print("#" * rowHashes, end="")
+        # Print a space for each end of a row 
         print()
 
 
-main()
-    
+if __name__ == "__main__":
+    main()    
