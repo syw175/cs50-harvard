@@ -15,10 +15,30 @@ def main():
         sys.exit("Usage: python tournament.py FILENAME")
 
     teams = []
-    # TODO: Read teams into memory from file
 
+    # Read teams into memory from file
+    with open (sys.argv[1], "r") as file:
+        # Open the file as a dictionary
+        filereader = csv.DictReader(file)
+
+        # Iterate through the file
+        for row in filereader: 
+            # Append team and rating as a dictionary to the list teams
+            teams.append({row["team"]: int(row["rating"])})
+        
+    # Good up until this point
     counts = {}
-    # TODO: Simulate N tournaments and keep track of win counts
+
+    # Simulate N tournaments and keep track of win counts
+    # for tournament in range(N):
+    #     winningTeam = simulate_tournament(teams)
+    #     print(winningTeam)
+        # try: 
+        #     counts[winningTeam] += 1
+        
+        # except KeyError: 
+        #     counts[winningTeam] = 1
+
 
     # Print each team's chances of winning, according to simulation
     for team in sorted(counts, key=lambda team: counts[team], reverse=True):
@@ -49,7 +69,9 @@ def simulate_round(teams):
 
 def simulate_tournament(teams):
     """Simulate a tournament. Return name of winning team."""
-    # TODO
+    while len(teams) > 1: 
+        teams = simulate_round(teams)
+    return teams[0]
 
 
 if __name__ == "__main__":
