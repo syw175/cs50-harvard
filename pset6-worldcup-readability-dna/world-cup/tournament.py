@@ -24,20 +24,24 @@ def main():
         # Iterate through the file
         for row in filereader: 
             # Append team and rating as a dictionary to the list teams
-            teams.append({row["team"]: int(row["rating"])})
-        
-    # Good up until this point
+            teams.append({"team": row["team"], "rating": int(row["rating"])})
+    
+    # Intitialize a dictionary to track the number of wins for each team
     counts = {}
 
+
     # Simulate N tournaments and keep track of win counts
-    # for tournament in range(N):
-    #     winningTeam = simulate_tournament(teams)
-    #     print(winningTeam)
-        # try: 
-        #     counts[winningTeam] += 1
+    for tournament in range(N):
+        # Simulate a tournament and get the winning team
+        winningTeam = simulate_tournament(teams)
+
+        # If the winning team is in the dictionary, increment the count
+        try: 
+            counts[winningTeam["team"]] += 1
         
-        # except KeyError: 
-        #     counts[winningTeam] = 1
+        # Otherwise, add the team to the dictionary and set the count to 1
+        except KeyError: 
+            counts[winningTeam["team"]] = 1
 
 
     # Print each team's chances of winning, according to simulation
@@ -71,6 +75,8 @@ def simulate_tournament(teams):
     """Simulate a tournament. Return name of winning team."""
     while len(teams) > 1: 
         teams = simulate_round(teams)
+
+    # Return the winning team
     return teams[0]
 
 
