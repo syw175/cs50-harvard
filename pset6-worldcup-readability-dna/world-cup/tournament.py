@@ -17,7 +17,7 @@ def main():
     teams = []
 
     # Read teams into memory from file
-    with open (sys.argv[1], "r") as file:
+    with open(sys.argv[1], "r") as file:
         # Open the file as a dictionary
         filereader = csv.DictReader(file)
 
@@ -37,11 +37,11 @@ def main():
 
         # If the winning team is in the dictionary, increment the count
         try: 
-            counts[winningTeam["team"]] += 1
+            counts[winningTeam] += 1
         
         # Otherwise, add the team to the dictionary and set the count to 1
         except KeyError: 
-            counts[winningTeam["team"]] = 1
+            counts[winningTeam] = 1
 
 
     # Print each team's chances of winning, according to simulation
@@ -77,7 +77,7 @@ def simulate_tournament(teams):
         teams = simulate_round(teams)
 
     # Return the winning team
-    return teams[0]
+    return teams[0]["team"]
 
 
 if __name__ == "__main__":
