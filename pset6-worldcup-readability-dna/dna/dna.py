@@ -1,14 +1,28 @@
 import csv
 import sys
+from unicodedata import name
 
 
 def main():
 
-    # TODO: Check for command-line usage
+    # Check for command-line usage
+    if len(sys.argv) != 3:
+        print("Usage: python dna.py data.csv sequence.txt")
+        sys.exit()
 
-    # TODO: Read database file into a variable
+    # Read database file into a variable
+    # {'Alice': {'AGATC': '2', 'AATG': '8', 'TATC': '3'}, 'Bob': {'AGATC': '4', 'AATG': '1', 'TATC': '5'}, 'Charlie': {'AGATC': '3', 'AATG': '2', 'TATC': '5'}}
+    dict = {}
+    with open(sys.argv[1], "r") as file:
+        fileReader = csv.DictReader(file)
+        for row in fileReader: 
+            name = row["name"]
+            row.pop("name")
+            dict[name] = row
     
-    # TODO: Read DNA sequence file into a variable
+    # Read DNA sequence file into a variable
+    with open(sys.argv[2], "r") as file: 
+        text = file.read()
 
     # TODO: Find longest match of each STR in DNA sequence
 
