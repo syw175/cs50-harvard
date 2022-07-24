@@ -5,7 +5,7 @@
  *
  *
  * Author: Steven Wong
- * Date: July 9, 2022
+ * Date: July 24, 2022
  */
 
 
@@ -44,17 +44,8 @@ void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
-bool create_cycle(bool lockedArray[MAX][MAX], pair originPair, pair toAddPair);
+bool create_cycle(pair toAddPair);
 int getMarginOfVictory(int pairIndex);
-
-
-
-
-// TO REMOVE.....................................
-// TEST FUNCTIONS --> Prototypes
-void printPairs(void);
-void printMatrix(void);
-void printLocked(void);
 
 
 int main(int argc, string argv[])
@@ -114,75 +105,11 @@ int main(int argc, string argv[])
     }
 
     add_pairs();
-
-
-    // TO REMOVE.....................................
-    // TEST FUNCTION --> Print out pairs before the sort
-    printf("\nPairs before the sort:\n");
-    printPairs();
-
-
     sort_pairs();
-
-
-    // TO REMOVE.....................................
-    // TEST FUNCTION --> Print out pairs after the sort
-    printf("\nPairs after the sort:\n");
-    printPairs();
-
-
-    // TO REMOVE.....................................
-    // TEST FUNCTION --> Print out locked before locking in
-    printf("\nLocked table before locking in\n");
-    printLocked();
-
-
     lock_pairs();
-
-
-    // TO REMOVE.....................................
-    // TEST FUNCTION --> Print out locked after locking in
-    printf("\nLocked table after locking in\n");
-    printLocked();
-
 
     print_winner();
     return 0;
-}
-
-
-// TO REMOVE.....................................
-// TEST FUNCTION --> Printing out adjacency Matrix
-void printMatrix(void) {
-    for (int i = 0; i < candidate_count; i++) {
-        for (int j = 0; j < candidate_count; j++) {
-            printf("%d\t", preferences[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-
-// TO REMOVE................................
-// TEST FUNCTION --> Printing out all pairs
-void printPairs(void) {
-    for (int i = 0; i < pair_count; i++) {
-        printf("Pair %d: Candidate %d won, Candidate %d lost\n", i+1, pairs[i].winner, pairs[i].loser);
-    }
-    return;
-}
-
-
-// TO REMOVE................................
-// TEST FUNCTION --> Printing out locked pairs
-void printLocked(void) {
-    for (int i = 0; i < candidate_count; i++) {
-        for (int y = 0; y < candidate_count; y++) {
-            printf(locked[i][y] ? "true\t" : "false\t");
-        }
-        printf("\n");
-    }
-    return;
 }
 
 
@@ -281,17 +208,18 @@ int getMarginOfVictory(int pairIndex) {
 }
 
 
-
-// TODO..........................................
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    for (int y = 0; y < pair_count; y++) {
-        // if (!create_cycle(locked, pairs[0], pairs[y])) {
-        //     locked[pairs[y].winner][pairs[y].loser] = true;
-        // }
-        locked[pairs[y].winner][pairs[y].loser] = true;
-
+    // Iterate through the pairs array
+    for (int y = 0; y < pair_count; y++) 
+    {
+        // If adding the pair does not create a cycle...
+        if (!create_cycle(pairs[y]))
+        {
+            // Lock the pair by setting the locked matrix to true
+            locked[pairs[y].winner][pairs[y].loser] = true;
+        }
     }
     return;
 }
@@ -299,8 +227,24 @@ void lock_pairs(void)
 
 // TODO.........................................
 // Determine if there would be a cycle by adding a new node to a graph
-bool create_cycle(bool lockedArray[MAX][MAX], pair originPair, pair toAddPair) {
-    return originPair.winner == toAddPair.loser;
+bool create_cycle(pair toAddPair) 
+{
+
+    // if next points to origin then we're adding a cycle
+    // loop through lockedArray and check if we can get back to origin
+
+
+    return false;
+
+    // origin = toAddPair
+    // loop
+    // for nodes in lockedArray[origin].items is there a next
+    //   if entire row is 0 then no next then just exit loop and we can add pair
+    //   else check if one of the 1s gets us back to originPair then return false
+    //             for each 1 in row create_cycle(origin, that one)
+    // next
+
+
     // return locked[originPair.winner][originPair.loser] == locked[toAddPair.winner][toAddPair.loser];
 }
 
