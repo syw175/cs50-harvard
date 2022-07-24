@@ -34,6 +34,7 @@ pair;
 string candidates[MAX];
 pair pairs[MAX * (MAX - 1) / 2];
 
+// Initialize pair and candidate counts
 int pair_count;
 int candidate_count;
 
@@ -136,6 +137,7 @@ void record_preferences(int ranks[]) {
     // Iterate through the ranks array and update the preferences matrix
     for (int i = 0; i < candidate_count; i++) {
         for (int j = i + 1; j < candidate_count; j++) {
+            // Increment the preferences matrix for the pair of candidates
             preferences[ranks[i]][ranks[j]]++;
         }
     }
@@ -156,6 +158,7 @@ void add_pairs(void) {
                 // Create a new pair and add it to the array of pairs
                 pair newPair = {rows, cols};
                 pairs[pair_count] = newPair;
+                // Increment the pair count
                 pair_count++;
             }
         }
@@ -169,6 +172,7 @@ void sort_pairs(void) {
 
     // Iterate through the pairs array
     for (int i = 0; i < pair_count; i++) {
+        // Set the max victory to the ith pair
         int maxVictoryMarginIndex = i;
         int maxStrength = getMarginOfVictory(i);
 
@@ -212,13 +216,14 @@ int getMarginOfVictory(int pairIndex) {
 void lock_pairs(void)
 {
     // Iterate through the pairs array
-    for (int y = 0; y < pair_count; y++) 
+    for (int i = 0; i < pair_count; i++) 
     {
+        pair currentPair = pairs[i];
         // If adding the pair does not create a cycle...
-        if (!create_cycle(pairs[y]))
+        if (!create_cycle(currentPair))
         {
             // Lock the pair by setting the locked matrix to true
-            locked[pairs[y].winner][pairs[y].loser] = true;
+            locked[currentPair.winner][currentPair.loser] = true;
         }
     }
     return;
@@ -227,25 +232,49 @@ void lock_pairs(void)
 
 // TODO.........................................
 // Determine if there would be a cycle by adding a new node to a graph
-bool create_cycle(pair toAddPair) 
-{
-
     // if next points to origin then we're adding a cycle
     // loop through lockedArray and check if we can get back to origin
-
-
-    return false;
-
-    // origin = toAddPair
+  
     // loop
     // for nodes in lockedArray[origin].items is there a next
     //   if entire row is 0 then no next then just exit loop and we can add pair
     //   else check if one of the 1s gets us back to originPair then return false
     //             for each 1 in row create_cycle(origin, that one)
     // next
+bool create_cycle(pair toAddPair) 
+{
+
+    // Get the winner and loser of the pair
+    int winner = toAddPair.winner;
+    int loser = toAddPair.loser;
+
+    // Iterate through the locked array
+    for (int i = 0; i < candidate_count; i++)
+    {
+        // If the locked array has a 1 at the ith row and the ith column...
+        if (locked[i][winner] && locked[i][loser])
+        {
+            // Create a new pair and check if it creates a cycle
+            pair newPair = {i, winner};
+            if (create_cycle(newPair))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 
 
-    // return locked[originPair.winner][originPair.loser] == locked[toAddPair.winner][toAddPair.loser];
+
+
+
+
+
+    
+
+
+
+
 }
 
 
