@@ -45,7 +45,7 @@ void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
-bool create_cycle(pair toAddPair);
+bool create_cycle(int winner, int loser);
 int getMarginOfVictory(int pairIndex);
 
 
@@ -115,13 +115,14 @@ int main(int argc, string argv[])
 
 
 // Update ranks given a new vote
-bool vote(int rank, string name, int ranks[]) {
-    
+bool vote(int rank, string name, int ranks[]) 
+{    
     // Iterate through the new vote and update the ranks array
-    for (int i = 0; i < candidate_count; i++) {
-
+    for (int i = 0; i < candidate_count; i++) 
+    {
         // Check if a candidate is valid and if it is, update the ranks array and return true
-        if (strcmp(name, candidates[i]) == 0) {
+        if (strcmp(name, candidates[i]) == 0) 
+        {
             ranks[rank] = i;
             return true;
         }
@@ -132,11 +133,13 @@ bool vote(int rank, string name, int ranks[]) {
 
 
 // Update preferences given one voter's ranks
-void record_preferences(int ranks[]) {
-
+void record_preferences(int ranks[]) 
+{
     // Iterate through the ranks array and update the preferences matrix
-    for (int i = 0; i < candidate_count; i++) {
-        for (int j = i + 1; j < candidate_count; j++) {
+    for (int i = 0; i < candidate_count; i++) 
+    {
+        for (int j = i + 1; j < candidate_count; j++) 
+        {
             // Increment the preferences matrix for the pair of candidates
             preferences[ranks[i]][ranks[j]]++;
         }
@@ -146,15 +149,17 @@ void record_preferences(int ranks[]) {
 
 
 // Record pairs of candidates where one is preferred over the other
-void add_pairs(void) {
-
+void add_pairs(void) 
+{
     // Iterate through the rows of the preferences matrix
-    for (int rows = 0; rows < candidate_count; rows++) {
+    for (int rows = 0; rows < candidate_count; rows++) 
+    {
         // Iterate through the columns of the preferences matrix
-        for (int cols = 0; cols < candidate_count; cols++) {
-
+        for (int cols = 0; cols < candidate_count; cols++) 
+        {
             // If there is a preference for candidate i over candidate j...
-            if (preferences[rows][cols] > preferences[cols][rows]) {
+            if (preferences[rows][cols] > preferences[cols][rows]) 
+            {
                 // Create a new pair and add it to the array of pairs
                 pair newPair = {rows, cols};
                 pairs[pair_count] = newPair;
@@ -168,22 +173,25 @@ void add_pairs(void) {
 
 
 // Sort pairs in decreasing order by strength of victory (Selection sort)
-void sort_pairs(void) {
-
+void sort_pairs(void) 
+{
     // Iterate through the pairs array
-    for (int i = 0; i < pair_count; i++) {
+    for (int i = 0; i < pair_count; i++) 
+    {
         // Set the max victory to the ith pair
         int maxVictoryMarginIndex = i;
         int maxStrength = getMarginOfVictory(i);
 
         // Iterate through the pairs array from the current index to the end
-        for (int j = i + 1; j < pair_count; j++) {
+        for (int j = i + 1; j < pair_count; j++) 
+        {
+            // Get the strength of victory for the jth pair
             int currentStrength = getMarginOfVictory(j);
 
             // If the current pair has a stronger victory margin than the max pair, update the max pair
-            if (getMarginOfVictory(j) > maxStrength) {
+            if (getMarginOfVictory(j) > maxStrength) 
+            {
                 maxStrength = currentStrength;
-                // Update the max victory margin index
                 maxVictoryMarginIndex = j;
             }
         }
@@ -220,7 +228,7 @@ void lock_pairs(void)
     {
         pair currentPair = pairs[i];
         // If adding the pair does not create a cycle...
-        if (!create_cycle(currentPair))
+        if (!create_cycle(currentPair.winner, currentPair.loser))
         {
             // Lock the pair by setting the locked matrix to true
             locked[currentPair.winner][currentPair.loser] = true;
@@ -230,70 +238,53 @@ void lock_pairs(void)
 }
 
 
-// TODO.........................................
 // Determine if there would be a cycle by adding a new node to a graph
-    // if next points to origin then we're adding a cycle
-    // loop through lockedArray and check if we can get back to origin
-  
-    // loop
-    // for nodes in lockedArray[origin].items is there a next
-    //   if entire row is 0 then no next then just exit loop and we can add pair
-    //   else check if one of the 1s gets us back to originPair then return false
-    //             for each 1 in row create_cycle(origin, that one)
-    // next
-bool create_cycle(pair toAddPair) 
+bool create_cycle(int winner, int loser) 
 {
+    // Base case: If the winner points to itself and creates a cycle, return true
+    if (locked[loser][winner])
+    {
+        return true;
+    }
 
-    // Get the winner and loser of the pair
-    int winner = toAddPair.winner;
-    int loser = toAddPair.loser;
-
-    // Iterate through the locked array
+    // Recursive Case: Iterate through the locked array 
     for (int i = 0; i < candidate_count; i++)
     {
-        // If the locked array has a 1 at the ith row and the ith column...
-        if (locked[i][winner] && locked[i][loser])
+        // If there is a path between the winner and i, and i is not the loser, return true
+        if (locked[loser][i] && create_cycle(winner, i))
         {
-            // Create a new pair and check if it creates a cycle
-            pair newPair = {i, winner};
-            if (create_cycle(newPair))
-            {
-                return true;
-            }
+            return true;
         }
     }
+    // At this point, there is no path between the winner and loser, so return false
     return false;
-
-
-
-
-
-
-
-    
-
-
-
-
 }
 
 
 // Print the winner of the election
-void print_winner(void) {
-
+void print_winner(void) 
+{
     // Iterate through the locked array
-    for (int cols = 0; cols < candidate_count; cols++) {
+    for (int cols = 0; cols < candidate_count; cols++) 
+    {
+        // Set the found variable to an initial value of true
         bool found = true;
 
         // If the column is all true, then the candidate is the winner
-        for (int rows = 0; rows < candidate_count; rows++) {
-            if (locked[rows][cols]) {
+        for (int rows = 0; rows < candidate_count; rows++) 
+        {
+            // If the locked array has a 0 at the ith row and the ith column...
+            if (locked[rows][cols]) 
+            {
+                // Set the found variable to false
                 found = false;
             }
         }
 
-        // If found is true, then the candidate is the winner
-        if (found) {
+        // If found is true at this point, then the candidate is the winner
+        if (found) 
+        {
+            // Print the winner and exit the loop
             printf("%s\n", candidates[cols]);
             break;
         }
