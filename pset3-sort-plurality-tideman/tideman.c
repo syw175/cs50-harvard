@@ -250,12 +250,25 @@ bool create_cycle(int winner, int loser)
     // Recursive Case: Iterate through the locked array 
     for (int i = 0; i < candidate_count; i++)
     {
-        // If there is a path between the winner and i, and i is not the loser, return true
-        if (locked[loser][i] && create_cycle(winner, i))
+        // If there is path between the loser and the ith candidate.. 
+        if (locked[loser][i])
         {
-            return true;
+            // If the ith candidate points to the winner and creates a cycle, return true
+            if (create_cycle(winner, i))
+            {
+                return true;
+            }
         }
     }
+
+
+
+    //     // If there is a path between the winner and i, and i is not the loser,return true
+    //     if (locked[loser][i] && create_cycle(winner, i))
+    //     {
+    //         return true;
+    //     }
+    // }
     // At this point, there is no path between the winner and loser, so return false
     return false;
 }
