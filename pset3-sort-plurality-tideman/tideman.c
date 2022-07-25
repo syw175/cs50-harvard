@@ -5,7 +5,7 @@
  *
  *
  * Author: Steven Wong
- * Date: July 24, 2022
+ * Date: July 25, 2022
  */
 
 
@@ -260,16 +260,7 @@ bool create_cycle(int winner, int loser)
             }
         }
     }
-
-
-
-    //     // If there is a path between the winner and i, and i is not the loser,return true
-    //     if (locked[loser][i] && create_cycle(winner, i))
-    //     {
-    //         return true;
-    //     }
-    // }
-    // At this point, there is no path between the winner and loser, so return false
+    // If no cycle is created, return false
     return false;
 }
 
