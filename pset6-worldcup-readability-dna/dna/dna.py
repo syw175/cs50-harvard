@@ -2,6 +2,8 @@ import csv
 import sys
 from unicodedata import name
 
+from numpy import true_divide
+
 
 def main():
 
@@ -12,24 +14,52 @@ def main():
 
     # Read database file into a variable
     # {'Alice': {'AGATC': '2', 'AATG': '8', 'TATC': '3'}, 'Bob': {'AGATC': '4', 'AATG': '1', 'TATC': '5'}, 'Charlie': {'AGATC': '3', 'AATG': '2', 'TATC': '5'}}
-    dict = {}
+    database = {}
     with open(sys.argv[1], "r") as file:
         fileReader = csv.DictReader(file)
         for row in fileReader: 
             name = row["name"]
             row.pop("name")
-            dict[name] = row
+            database[name] = row
+        # temp name
+        possibleSeq = list(row.keys())
     
     # Read DNA sequence file into a variable
     with open(sys.argv[2], "r") as file: 
-        text = file.read()
+        dnaSequence = file.read()
 
     # TODO: Find longest match of each STR in DNA sequence
+    # print(possibleSeq)
 
+    longestMatch = {} 
+    for sequence in possibleSeq: 
+        longestMatch[sequence] = longest_match(dnaSequence, sequence)
+    
+    # print(longestMatch)
+    
+    
+    printed = False
     # TODO: Check database for matching profiles
+    for person in database: 
+        flag = True
+        
+        current = database[person]
+        for sequence in current: 
+            if longestMatch[sequence] != int(current[sequence]): 
+                flag = False
+        
+        if flag == True:
+            print(person)
+
+
+
+    if not printed: 
+        print("No match.")
+
+
+    
 
     return
-
 
 def longest_match(sequence, subsequence):
     """Returns length of longest run of subsequence in sequence."""
