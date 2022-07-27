@@ -1,0 +1,4 @@
+-- List the titles of all movies in which both Johnny Depp and Helena Bonham Carter starred.
+-- You may assume that there is only one person in the database with the name Johnny Depp.
+-- You may assume that there is only one person in the database with the name Helena Bonham Carter.
+-- TODO
