@@ -1,4 +1,7 @@
 -- List the titles and release years of all Harry Potter movies, in chronological order
 -- Output a table with two columns, one for the title of each movie and one for the release year of each movie
 -- The title of all Harry Potter movies will begin with the words “Harry Potter”
--- TODO
+
+SELECT title, year FROM movies 
+WHERE title LIKE "Harry Potter%"
+ORDER BY year;

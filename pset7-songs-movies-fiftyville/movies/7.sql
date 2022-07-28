@@ -2,4 +2,11 @@
 -- For movies with the same rating, order them alphabetically by title
 -- Output a table with two columns, one for the title of each movie and one for the rating of each movie
 -- Movies without ratings should not be included in result
--- TODO
+
+SELECT title, rating FROM movies
+JOIN ratings on movies.id = ratings.movie_id
+WHERE year = 2010 and rating IS NOT NULL
+ORDER BY rating DESC, title;  
+
+
+
