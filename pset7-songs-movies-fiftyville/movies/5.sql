@@ -2,6 +2,7 @@
 -- Output a table with two columns, one for the title of each movie and one for the release year of each movie
 -- The title of all Harry Potter movies will begin with the words “Harry Potter”
 
-SELECT title, year FROM movies 
-WHERE title LIKE "Harry Potter%"
-ORDER BY year;
+SELECT title, year 
+    FROM movies 
+    WHERE title LIKE "Harry Potter%"
+    ORDER BY year;
