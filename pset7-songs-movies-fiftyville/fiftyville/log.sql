@@ -1,14 +1,16 @@
 -- Keep a log of any SQL queries you execute as you solve the mystery
 
 -- Starting information: The theft took place on July 28, 2021 and that it took place on Humphrey Street.
-
 -- Get further description about the CS50 duck theft 
 -- id|year|month|day|street|description
 -- 295|2021|7|28|Humphrey Street|Theft of the CS50 duck took place at 10:15am at the Humphrey Street bakery. 
 -- Interviews were conducted today with three witnesses who were present at the time 
 -- each of their interview transcripts mentions the bakery.
 SELECT * FROM crime_scene_reports
-WHERE year = 2021 AND month = 7 AND day = 28 AND street = "Humphrey Street";
+WHERE year = 2021 
+    AND month = 7 
+    AND day = 28 
+    AND street = "Humphrey Street";
 
 
 -- Look at the 3 detailed interview transcripts mentioned in the crime scene report 
@@ -17,7 +19,9 @@ WHERE year = 2021 AND month = 7 AND day = 28 AND street = "Humphrey Street";
 -- 162|Eugene|2021|7|28|I don't know the thief's name, but it was someone I recognized. Earlier this morning, before I arrived at Emma's bakery, I was walking by the ATM on Leggett Street and saw the thief there withdrawing some money.
 -- 163|Raymond|2021|7|28|As the thief was leaving the bakery, they called someone who talked to them for less than a minute. In the call, I heard the thief say that they were planning to take the earliest flight out of Fiftyville tomorrow. The thief then asked the person on the other end of the phone to purchase the flight ticket.
 SELECT * FROM interviews
-WHERE year = 2021 AND month = 7 AND day = 28;
+WHERE year = 2021 
+    AND month = 7   
+    AND day = 28;
 
 
 -- Following up on Ruth -> Thief got in a car within 10min of crime in bakery parking lot
@@ -66,9 +70,15 @@ WHERE license_plate
 -- 467400|Luca|(389) 555-5198|8496433585|4328GD8|28500762|467400|2014
 -- 243696|Barry|(301) 555-4174|7526138472|6P58WS2|56171033|243696|2018
 SELECT * FROM people 
-JOIN bank_accounts ON bank_accounts.person_id = people.id 
-WHERE license_plate IN (SELECT license_plate FROM bakery_security_logs
-WHERE year = 2021 AND month = 7 AND day = 28 AND hour = 10 AND minute BETWEEN 15 AND 25);
+JOIN bank_accounts 
+    ON bank_accounts.person_id = people.id 
+WHERE license_plate 
+    IN (SELECT license_plate FROM bakery_security_logs 
+        WHERE year = 2021 
+            AND month = 7 
+            AND day = 28 
+            AND hour = 10 
+            AND minute BETWEEN 15 AND 25);
 
 
 -- Following up on Eugene where he saw the thief withdraw $ from ATM on Leggett Street 
@@ -79,12 +89,21 @@ WHERE year = 2021 AND month = 7 AND day = 28 AND hour = 10 AND minute BETWEEN 15
 -- 396669|Iman|(829) 555-5269|7049073643|L93JTIZ|25506511|396669|2014|288|25506511|2021|7|28|Leggett Street|withdraw|20
 -- 467400|Luca|(389) 555-5198|8496433585|4328GD8|28500762|467400|2014|246|28500762|2021|7|28|Leggett Street|withdraw|48
 SELECT * FROM people
-JOIN bank_accounts ON bank_accounts.person_id = people.id
-JOIN atm_transactions ON atm_transactions.account_number = bank_accounts.account_number
-WHERE atm_location = "Leggett Street"   
-AND year = 2021 AND month = 7 AND day = 28
-AND license_plate IN (SELECT license_plate FROM bakery_security_logs
-WHERE year = 2021 AND month = 7 AND day = 28 AND hour = 10 AND minute BETWEEN 15 AND 25);
+    JOIN bank_accounts 
+        ON bank_accounts.person_id = people.id
+    JOIN atm_transactions   
+        ON atm_transactions.account_number = bank_accounts.account_number
+    WHERE atm_location = "Leggett Street"   
+        AND year = 2021 
+        AND month = 7 
+        AND day = 28
+        AND license_plate 
+            IN (SELECT license_plate FROM bakery_security_logs
+                WHERE year = 2021 
+                    AND month = 7 
+                    AND day = 28 
+                    AND hour = 10 
+                    AND minute BETWEEN 15 AND 25);
 
 
 -- Check our current suspects: Luca, Burce, Diana, Iman to see if any <1min calls were made after crime
@@ -112,19 +131,20 @@ WHERE year = 2021 AND month = 7 AND day = 28 AND hour = 10 AND minute BETWEEN 15
 SELECT * FROM passengers 
 JOIN flights ON flights.id = passengers.flight_id 
 WHERE passengers.passport_number = 5773159633 OR passengers.passport_number = 3592750733
-ORDER BY flights.minute LIMIT 1;
+ORDER BY flights.minute DESC LIMIT 1;
 
 
 -- Find the city to which Bruce escaped to... 
-SELECT full_name FROM airports 
+SELECT * FROM airports 
 WHERE airports.id IN (SELECT flights.destination_airport_id FROM passengers 
 JOIN flights ON flights.id = passengers.flight_id 
 WHERE passengers.passport_number = 5773159633 OR passengers.passport_number = 3592750733
-ORDER BY flights.minute LIMIT 1);
+ORDER BY flights.minute DESC LIMIT 1);
+
 
 JOIN flights ON flights.id = passengers.flight_id 
 WHERE passengers.passport_number = 5773159633 OR passengers.passport_number = 3592750733
-ORDER BY flights.minute LIMIT 1;
+ORDER BY flights.minute DESC LIMIT 1;
 
 
 -- Find the name of Bruce's accomplishmen by checking outgoing calls made close to crime time 
@@ -137,33 +157,9 @@ SELECT * FROM phone_calls
 WHERE caller = "(367) 555-5533" 
 AND year = 2021 AND month = 7 AND day = 28;
 
+
 -- Check from phone numbers to see if they were on the first flight out on July 29, 2021 
 -- to find BRUCE's accomplice 
 SELECT people.name FROM people
 WHERE people.phone_number IN 
     (SELECT receiver FROM phone_calls WHERE caller = "(367) 555-5533" AND year = 2021 AND month = 7 AND day = 28)
-
-                      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
