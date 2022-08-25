@@ -6,7 +6,18 @@
         <link href="styles.css" rel="stylesheet">
         <title>Trivia!</title>
         <script>
+
             // TODO: Add code to check answers to questions
+            function multipleChoice()
+            {
+                let button = document.querySelectorAll('button');
+                button.style.backgroundColor = 'red';
+            }
+
+            document.addEventListener('click', multipleChoice());
+
+
+
         </script>
     </head>
     <body>
@@ -19,12 +30,29 @@
                 <h2>Part 1: Multiple Choice </h2>
                 <hr>
                 <!-- TODO: Add multiple choice question here -->
+                <h3>What is the approximate ratio of people to sheep in New Zealand</h3>
+                
+                <!-- Buttons Here-->
+                <button>6 people per 1 sheep</button>
+                <button>3 people per 1 sheep</button>
+                <button>1 person per 1 sheep</button>
+                <button>1 person per 3 sheep</button>
+                <button>1 person per 6 sheep</button>
+   
             </div>
 
             <div class="section">
                 <h2>Part 2: Free Response</h2>
                 <hr>
                 <!-- TODO: Add free response question here -->
+                <h3>In which country is it illegal to own only one guinea pig, as a lone guinea pig might get lonely?</h3>
+
+                <!-- Text box here with submit button -->
+                <form> 
+                    <input autocomplete="off" placeholder="Your Answer:" type="text">
+                    <input type="Submit" value="Check Answer">
+                    
+                </form>
             </div>
         </div>
     </body>
