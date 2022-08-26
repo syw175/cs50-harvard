@@ -6,18 +6,27 @@
         <link href="styles.css" rel="stylesheet">
         <title>Trivia!</title>
         <script>
+            // Check Answers to Questions
+            function multipleChoice(button)
+            {                
+                // Grab the user feedback element
+                let result = document.querySelector('#sheepResult');
+                // Change text to white
+                button.style.color = 'white';
 
-            // TODO: Add code to check answers to questions
-            function multipleChoice()
-            {
-                let button = document.querySelectorAll('button');
-                button.style.backgroundColor = 'red';
+                // If answer is correct, change feedback to "Correct!" and highlight the text box in green
+                if (button.value == 'correct')
+                {
+                    button.style.backgroundColor = 'green';
+                    result.innerHTML = "Correct!";
+                }
+                // Otherwise set it to red and set feedback to "Incorrect!"
+                else
+                {
+                    button.style.backgroundColor = 'red';
+                    result.innerHTML = "Incorrect!";
+                }
             }
-
-            document.addEventListener('click', multipleChoice());
-
-
-
         </script>
     </head>
     <body>
@@ -29,30 +38,59 @@
             <div class="section">
                 <h2>Part 1: Multiple Choice </h2>
                 <hr>
-                <!-- TODO: Add multiple choice question here -->
-                <h3>What is the approximate ratio of people to sheep in New Zealand</h3>
+                <!-- Add multiple choice question -->
+                <h3>What is the approximate ratio of people to sheep in New Zealand?</h3>
+
+                <!-- Paragraph for user feedback -->
+                <p id="sheepResult"></p>
                 
                 <!-- Buttons Here-->
-                <button>6 people per 1 sheep</button>
-                <button>3 people per 1 sheep</button>
-                <button>1 person per 1 sheep</button>
-                <button>1 person per 3 sheep</button>
-                <button>1 person per 6 sheep</button>
+                <button onclick="multipleChoice(this)" value="correct" type="button">6 people per 1 sheep</button>
+                <button onclick="multipleChoice(this)" value="incorrect1" type="button">3 people per 1 sheep</button>
+                <button onclick="multipleChoice(this)" value="incorrect2" type="button">1 person per 1 sheep</button>
+                <button onclick="multipleChoice(this)" value="incorrect3" type="button">1 person per 3 sheep</button>
+                <button onclick="multipleChoice(this)" value="incorrect4" type="button">1 person per 6 sheep</button>
    
             </div>
 
             <div class="section">
                 <h2>Part 2: Free Response</h2>
                 <hr>
-                <!-- TODO: Add free response question here -->
+                <!-- Free response question here -->
                 <h3>In which country is it illegal to own only one guinea pig, as a lone guinea pig might get lonely?</h3>
-
-                <!-- Text box here with submit button -->
-                <form> 
-                    <input autocomplete="off" placeholder="Your Answer:" type="text">
-                    <input type="Submit" value="Check Answer">
-                    
+                <p id="countryMessage"></p>
+                <!-- One way to do this but other way is better -->
+                <!-- <form onsubmit="writtenAnswer(); return false;">  -->
+                <form>
+                    <input autocomplete="off" id="written" placeholder="Your Answer:" type="text">
+                    <input type="Submit">
                 </form>
+                <script>
+                    // Lambda Expression to check correctness of the written question
+                    document.querySelector('form').addEventListener('submit', function(e) {
+                        // Get the element with the id written
+                        let answer = document.querySelector('#written');
+                        // Get the element with the id countryMessage
+                        let result = document.querySelector('#countryMessage');
+                        // Set the text to white 
+                        answer.style.color = 'white';
+                        
+                        // If the answer is correct, give feedback and change box to green
+                        if (answer.value == 'Switzerland')
+                        {
+                            answer.style.backgroundColor = 'green';
+                            result.innerHTML = "Correct!";
+                        }
+                        // Otherwise, indicate answer is incorrect and change box to red
+                        else 
+                        {
+                            answer.style.backgroundColor = 'red';
+                            result.innerHTML = "Incorrect!";
+                        }
+                        // Remove default behaviour of sending response to the server
+                        e.preventDefault();
+                    });
+                </script> 
             </div>
         </div>
     </body>
