@@ -1,0 +1,15 @@
+body {
+    background-color: aquamarine;
+    font-family: Arial, Helvetica, sans-serif;
+    color: red;
+    font-size: medium;
+    margin: 0;
+    text-align: left;
+}
+
+.border {
+    background-color: aqua;
+}
+
+
+
